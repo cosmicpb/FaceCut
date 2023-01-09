@@ -1,10 +1,19 @@
 from pytube import YouTube
+from pytube.cli import on_progress
 import cv2
 from datetime import timedelta
 import numpy as np
 import os
 from pathlib import Path
 
+
+
+def on_progress(stream, chunk, bytes_remaining):
+    """Callback function"""
+    total_size = stream.filesize
+    bytes_downloaded = total_size - bytes_remaining
+    pct_completed = bytes_downloaded / total_size * 100
+    print(f"Download video: {round(pct_completed, 2)} %")
 
 
 def format_timedelta(td):
@@ -77,10 +86,12 @@ fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
 
 
 SAVING_FRAMES_PER_SECOND = float(fps)
-YouTube(link).streams.first().download(filename=name)
-
+YouTube(link,on_progress_callback=on_progress).streams.first().download(filename=name)
+print('Download Concluído.')
+print(f'Capturando frames a uma taxa de {SAVING_FRAMES_PER_SECOND} fps.')
 cutvideo(name)
 os.mkdir(name + '-faces')
+print('Classificando imagens')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 folder_dir = "C:\\Users\\paulo.baldacim\\Documents\\GitHub\\FascistFree2\\" + name + "-opencv\\"
