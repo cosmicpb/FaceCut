@@ -19,8 +19,15 @@ git clone https://github.com/cosmicpb/FascistFree.git
 cd FascistFree
 python3 main.py
 ```
-![alt text](blob:https://web.whatsapp.com/a665d594-fbeb-4c07-a03e-c16dca0df0f2)
+![alt text](https://uploaddeimagens.com.br/images/004/289/753/original/1.png?1673290162)
+Serão criadas duas novas pastas:
+1. video-opencv (com todos os frames capturados)
+2. video-faces (com todas as faces detectadas nos frames capturados)
 
+O código está capturando 1 frame por segundo. Para mudar esta taxa, modifique a seguinte linha de código:
+```
+SAVING_FRAMES_PER_SECOND = 1
+```
 Developed by Paulo Baldacim Junior
 
 
