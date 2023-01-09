@@ -5,7 +5,7 @@ import numpy as np
 import os
 from pathlib import Path
 
-SAVING_FRAMES_PER_SECOND = 1
+
 
 def format_timedelta(td):
     """Utility function to format timedelta objects in a cool way (e.g 00:00:20.05)
@@ -71,11 +71,12 @@ def cutvideo(video_file):
         # increment the frame count
         count += 1
 
-link = input("Enter the YouTube video URL: ")
-name = input("Give a filename: ")
+link = input("Insira a URL do vídeo do YT: ")
+name = input("Dê um título ao vídeo: ")
+fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
 
 
-
+SAVING_FRAMES_PER_SECOND = float(fps)
 YouTube(link).streams.first().download(filename=name)
 
 cutvideo(name)
