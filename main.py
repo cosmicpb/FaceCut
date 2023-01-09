@@ -6,7 +6,8 @@ import numpy as np
 import os
 from pathlib import Path
 from tqdm import tqdm
-
+import shutil
+import twitter_video_dl.twitter_video_dl as tvdl
 
 
 def on_progress(stream, chunk, bytes_remaining):
@@ -81,34 +82,42 @@ def cutvideo(video_file):
         # increment the frame count
         count += 1
 
-directory = os.getcwd()  + "\\"
-
-
+directory = os.getcwd()
 
 link = input("Insira a URL do vídeo do YT: ")
 name = input("Dê um título ao vídeo: ")
 fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
 
-
 SAVING_FRAMES_PER_SECOND = float(fps)
-YouTube(link,on_progress_callback=on_progress).streams.first().download(filename=name)
+
+if "youtube" in link:
+    # downloading video from YouTube link
+    YouTube(link,on_progress_callback=on_progress).streams.first().download(filename=name)
+elif "twitter" in link:
+    # copying config file to Twitter Downloader lib folder
+    tvdl_folder = os.path.dirname(tvdl.__file__)
+    request_details_file = os.path.join(tvdl_folder, "RequestDetails.json")
+    shutil.copyfile('RequestDetails.json', request_details_file)
+    # downloading video from Twitter link
+    tvdl.download_video(link, name)
+
 print('Download Concluído.')
 print(f'Capturando frames a uma taxa de {SAVING_FRAMES_PER_SECOND} fps.')
 cutvideo(name)
-os.mkdir(name + '-faces')
+if not os.path.exists(os.path.join(directory, name + '-faces')):
+    os.mkdir(os.path.join(directory, name + '-faces'))
 print('Classificando imagens')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-folder_dir = directory  + name + "-opencv\\"
+folder_dir = os.path.join(directory, name + "-opencv")
 
 for images in tqdm(os.listdir(folder_dir)):
-    image = cv2.imread(folder_dir + images)
+    image = cv2.imread(os.path.join(folder_dir, images))
 
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     faces = face_cascade.detectMultiScale(gray_image)
 
-
     if(len(faces)>=1):
-        Path(directory + name + "-opencv\\" + images).rename(directory + name + "-faces\\" + images)
+        Path(os.path.join(directory, name + "-opencv", images)).rename(os.path.join(directory, name + "-faces", images))
         print(images)
 
