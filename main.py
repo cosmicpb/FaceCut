@@ -5,7 +5,7 @@ from datetime import timedelta
 import numpy as np
 import os
 from pathlib import Path
-
+from tqdm import tqdm
 
 
 def on_progress(stream, chunk, bytes_remaining):
@@ -96,7 +96,7 @@ face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 folder_dir = "C:\\Users\\paulo.baldacim\\Documents\\GitHub\\FascistFree2\\" + name + "-opencv\\"
 
-for images in os.listdir(folder_dir):
+for images in tqdm(os.listdir(folder_dir)):
     image = cv2.imread(folder_dir + images)
 
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
