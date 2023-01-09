@@ -8,6 +8,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 
+
 def on_progress(stream, chunk, bytes_remaining):
     """Callback function"""
     total_size = stream.filesize
@@ -80,6 +81,10 @@ def cutvideo(video_file):
         # increment the frame count
         count += 1
 
+directory = os.getcwd()  + "\\"
+
+
+
 link = input("Insira a URL do vídeo do YT: ")
 name = input("Dê um título ao vídeo: ")
 fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
@@ -94,7 +99,7 @@ os.mkdir(name + '-faces')
 print('Classificando imagens')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-folder_dir = "C:\\Users\\paulo.baldacim\\Documents\\GitHub\\FascistFree2\\" + name + "-opencv\\"
+folder_dir = directory  + name + "-opencv\\"
 
 for images in tqdm(os.listdir(folder_dir)):
     image = cv2.imread(folder_dir + images)
@@ -104,6 +109,6 @@ for images in tqdm(os.listdir(folder_dir)):
 
 
     if(len(faces)>=1):
-        Path("C:\\Users\\paulo.baldacim\\Documents\\GitHub\\FascistFree2\\"+ name + "-opencv\\" + images).rename("C:\\Users\\paulo.baldacim\\Documents\\GitHub\\FascistFree2\\" + name + "-faces\\" + images)
+        Path(directory + name + "-opencv\\" + images).rename(directory + name + "-faces\\" + images)
         print(images)
 
