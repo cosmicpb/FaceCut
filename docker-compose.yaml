@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    build: .
+    environment:
+      - DOCKER=true
+      - LINK="${LINK}"
+      - FPS=1
+    command: python main.py
+    volumes:
+      - .:/app
