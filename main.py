@@ -86,9 +86,18 @@ def cutvideo(video_file, cv_folder):
 
 
 if __name__ == "__main__":
-    link = input("Insira a URL do vídeo (Youtube ou Twitter): ")
-    name = input("Dê um título ao vídeo: ")
-    fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
+    docker = os.environ.get('DOCKER')
+    if docker:
+        import datetime
+        import requests
+        link = os.environ.get('LINK')
+        now = datetime.datetime.now()
+        name = f'{now.year}_{now.month}_{now.day}_{now.second}'
+        fps = os.environ.get('FPS')
+    else:
+        link = input("Insira a URL do vídeo (Youtube ou Twitter): ")
+        name = input("Dê um título ao vídeo: ")
+        fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
 
     SAVING_FRAMES_PER_SECOND = float(fps)
 
