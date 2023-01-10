@@ -19,16 +19,20 @@ def on_progress(stream, chunk, bytes_remaining):
 
 
 def format_timedelta(td):
-    """Utility function to format timedelta objects in a cool way (e.g 00:00:20.05)
+    """Utility function to format timedelta objects in a cool way (e.g. 00:00:20.05)
     omitting microseconds and retaining milliseconds"""
     result = str(td)
+
     try:
         result, ms = result.split(".")
     except ValueError:
         return (result + ".00").replace(":", "-")
+
     ms = int(ms)
     ms = round(ms / 1e4)
+
     return f"{result}.{ms:02}".replace(":", "-")
+
 
 def get_saving_frames_durations(cap, saving_fps):
     """A function that returns the list of durations where to save the frames"""
@@ -38,14 +42,11 @@ def get_saving_frames_durations(cap, saving_fps):
     # use np.arange() to make floating-point steps
     for i in np.arange(0, clip_duration, 1 / saving_fps):
         s.append(i)
+
     return s
 
-def cutvideo(video_file):
-    filename, _ = os.path.splitext(video_file)
-    filename += "-opencv"
-    # make a folder by the name of the video file
-    if not os.path.isdir(filename):
-        os.mkdir(filename)
+
+def cutvideo(video_file, cv_folder):
     # read the video file
     cap = cv2.VideoCapture(video_file)
     # get the FPS of the video
@@ -56,6 +57,7 @@ def cutvideo(video_file):
     saving_frames_durations = get_saving_frames_durations(cap, saving_frames_per_second)
     # start the loop
     count = 0
+
     while True:
         is_read, frame = cap.read()
         if not is_read:
@@ -73,7 +75,7 @@ def cutvideo(video_file):
             # if closest duration is less than or equals the frame duration,
             # then save the frame
             frame_duration_formatted = format_timedelta(timedelta(seconds=frame_duration))
-            cv2.imwrite(os.path.join(filename, f"{count}.jpg"), frame)
+            cv2.imwrite(os.path.join(cv_folder, f"{count}.jpg"), frame)
             # drop the duration spot from the list, since this duration spot is already saved
             try:
                 saving_frames_durations.pop(0)
@@ -82,42 +84,52 @@ def cutvideo(video_file):
         # increment the frame count
         count += 1
 
-directory = os.getcwd()
 
-link = input("Insira a URL do vídeo do YT: ")
-name = input("Dê um título ao vídeo: ")
-fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
+if __name__ == "__main__":
+    link = input("Insira a URL do vídeo (Youtube ou Twitter): ")
+    name = input("Dê um título ao vídeo: ")
+    fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
 
-SAVING_FRAMES_PER_SECOND = float(fps)
+    SAVING_FRAMES_PER_SECOND = float(fps)
 
-if "youtube" in link:
-    # downloading video from YouTube link
-    YouTube(link,on_progress_callback=on_progress).streams.first().download(filename=name)
-elif "twitter" in link:
-    # copying config file to Twitter Downloader lib folder
-    tvdl_folder = os.path.dirname(tvdl.__file__)
-    request_details_file = os.path.join(tvdl_folder, "RequestDetails.json")
-    shutil.copyfile('RequestDetails.json', request_details_file)
-    # downloading video from Twitter link
-    tvdl.download_video(link, name)
+    root_dir = os.sep.join([".", "dump", name])
+    root_path = Path(root_dir)
+    root_path.mkdir(parents=True, exist_ok=True)
 
-print('Download Concluído.')
-print(f'Capturando frames a uma taxa de {SAVING_FRAMES_PER_SECOND} fps.')
-cutvideo(name)
-if not os.path.exists(os.path.join(directory, name + '-faces')):
-    os.mkdir(os.path.join(directory, name + '-faces'))
-print('Classificando imagens')
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    opencv_dir = os.sep.join([root_dir, "opencv"])
+    faces_dir = os.sep.join([root_dir, "faces"])
 
-folder_dir = os.path.join(directory, name + "-opencv")
+    Path(opencv_dir).mkdir(parents=True, exist_ok=True)
+    Path(faces_dir).mkdir(parents=True, exist_ok=True)
 
-for images in tqdm(os.listdir(folder_dir)):
-    image = cv2.imread(os.path.join(folder_dir, images))
+    video_path = os.sep.join([root_dir, "video"])
 
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    faces = face_cascade.detectMultiScale(gray_image)
+    if "youtube" in link:
+        # downloading video from YouTube link
+        YouTube(link, on_progress_callback=on_progress).streams.first().download(filename=video_path)
+    elif "twitter" in link:
+        # copying config file to Twitter Downloader lib folder
+        tvdl_folder = os.path.dirname(tvdl.__file__)
+        request_details_file = os.path.join(tvdl_folder, "RequestDetails.json")
+        shutil.copyfile('RequestDetails.json', request_details_file)
+        # downloading video from Twitter link
+        tvdl.download_video(link, name)
 
-    if(len(faces)>=1):
-        Path(os.path.join(directory, name + "-opencv", images)).rename(os.path.join(directory, name + "-faces", images))
-        print(images)
+    print('Download Concluído.')
 
+    print(f'Capturando frames a uma taxa de {SAVING_FRAMES_PER_SECOND} fps.')
+    cutvideo(video_path, opencv_dir)
+
+    print('Classificando imagens')
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
+    for images in tqdm(os.listdir(opencv_dir)):
+        image_dir = os.sep.join([opencv_dir, images])
+        image = cv2.imread(image_dir)
+
+        gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        faces = face_cascade.detectMultiScale(gray_image)
+
+        if len(faces) >= 1:
+            Path(image_dir).rename(os.sep.join([faces_dir, images]))
+            print(images)
