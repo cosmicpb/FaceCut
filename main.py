@@ -8,6 +8,7 @@ from pathlib import Path
 from tqdm import tqdm
 import shutil
 import twitter_video_dl.twitter_video_dl as tvdl
+import requests
 
 
 def on_progress(stream, chunk, bytes_remaining):
