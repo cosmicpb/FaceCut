@@ -12,6 +12,33 @@ Faça o download do código utilizando GIT ou utilize o ZIP disponível aqui no 
 git clone https://github.com/cosmicpb/FascistFree.git
 
 ```
+
+## Usando o script com o docker-compose
+
+
+Passo 1 - Acesse o repositório do projeto:
+
+```sh
+cd FascistFree
+```
+
+Passo 2 - Gere o container:
+
+```sh
+docker-compose build
+```
+
+Passo 3 - Execute o container alterando o link para o seu link do YouTube:
+
+```sh
+LINK=https://www.youtube.com/watch?v=xxxx docker-compose run app
+```
+
+> Será gerada na pasta `dump` as imagens encontradas
+
+> Nota: [Clique aqui](https://docs.docker.com/compose/install/) caso você não tenha o
+docker-compose instalado.
+
 ## Usando o script
 Passo 1 - Acesse o repositório do projeto:
 ```sh
