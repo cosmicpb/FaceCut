@@ -8,6 +8,8 @@ Depois disso, todos os rostos que forem aparecendo serão detectados e enviados 
 
 Faça o download do código utilizando GIT ou utilize o ZIP disponível aqui no portal do GitHub.
 
+*IMPORTANTE salientar que o código NÃO IDENTIFICA faces, apenas detecta-as em qualquer vídeo que for submetido ao algoritmo, podendo ser utilizado para outros fins como seleção de rosto de atores em filmes e novelas.
+
 ```sh
 git clone https://github.com/cosmicpb/FascistFree.git
 
