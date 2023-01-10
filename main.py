@@ -9,6 +9,7 @@ from tqdm import tqdm
 import shutil
 import twitter_video_dl.twitter_video_dl as tvdl
 import requests
+import time
 
 
 def on_progress(stream, chunk, bytes_remaining):
@@ -101,7 +102,7 @@ if __name__ == "__main__":
         fps = input("Quantos frames por segundo deseja capturar? (Ex.: 0.1): ")
 
     SAVING_FRAMES_PER_SECOND = float(fps)
-
+    tm1 = time.perf_counter()
     root_dir = os.sep.join([".", "dump", name])
     root_path = Path(root_dir)
     root_path.mkdir(parents=True, exist_ok=True)
@@ -143,3 +144,6 @@ if __name__ == "__main__":
         if len(faces) >= 1:
             Path(image_dir).rename(os.sep.join([faces_dir, images]))
             print(images)
+
+tm2 = time.perf_counter()
+print(f'Tempo para conclusão: {tm2-tm1:0.2f} segundos.')
