@@ -61,7 +61,7 @@ O código está capturando 1 frame por segundo. Para mudar esta taxa, modifique 
 ```
 SAVING_FRAMES_PER_SECOND = 1
 ```
-Developed by Paulo Baldacim Junior
+Developed by Paulo
 
 
 **FREE ASSANGE**
