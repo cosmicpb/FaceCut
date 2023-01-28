@@ -4,7 +4,7 @@ Assim que isso for feito, o programa pedirá um nome para o arquivo.
 
 Depois disso, todos os rostos que forem aparecendo serão detectados e enviados para uma pasta dentro do diretório do programa.
 
-## Instação
+## Instalação
 
 Faça o download do código utilizando GIT ou utilize o ZIP disponível aqui no portal do GitHub.
 
