@@ -54,7 +54,7 @@ Passo 3 - Execute o script Python:
 ```sh
 python3 main.py
 ```
-![alt text](https://uploaddeimagens.com.br/images/004/289/753/original/1.png?1673290162)
+
 Serão criadas duas novas pastas:
 1. video-opencv (com todos os frames capturados)
 2. video-faces (com todas as faces detectadas nos frames capturados)
