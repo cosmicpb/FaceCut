@@ -11,7 +11,7 @@ Faça o download do código utilizando GIT ou utilize o ZIP disponível aqui no 
 *IMPORTANTE salientar que o código NÃO IDENTIFICA faces, apenas detecta-as em qualquer vídeo que for submetido ao algoritmo, podendo ser utilizado para outros fins como seleção de rosto de atores em filmes e novelas.
 
 ```sh
-git clone https://github.com/cosmicpb/FascistFree.git
+git clone https://github.com/cosmicpb/FaceCut.git
 
 ```
 
@@ -21,7 +21,7 @@ git clone https://github.com/cosmicpb/FascistFree.git
 Passo 1 - Acesse o repositório do projeto:
 
 ```sh
-cd FascistFree
+cd FaceCut
 ```
 
 Passo 2 - Gere o container:
