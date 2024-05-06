@@ -44,7 +44,7 @@ docker-compose instalado.
 ## Usando o script
 Passo 1 - Acesse o repositório do projeto:
 ```sh
-cd FascistFree
+cd FaceCut
 ```
 Passo 2 - Instale as Libs (Bibliotecas) necessárias através do gerenciador de pacotes "pip":
 ```sh
